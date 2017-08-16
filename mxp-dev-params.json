@@ -1,0 +1,43 @@
+/* Copy from https://raw.githubusercontent.com/gr4per/azureswarm/develop/dev_params.json */
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceGroupShort": {
+      "value": "besdev"
+    },
+    "mysqlPassword": {
+      "value": "notSecureP455w0rd"
+    },
+    "postgresPassword": {
+      "value": "kong"
+    },
+    "domainNameLabel": {
+      "value": "bnp-develop"
+    },
+    "workerPoolSize": {
+      "value": "3"
+    },
+    "vnetExisting": {
+      "value": "yes"
+    },
+    "vnetName": {
+      "value": "besstage-vnet"
+    },
+    "vnetResourceGroupName": {
+      "value": "besstage"
+    },
+    "vnetIpRange": {
+      "value": "10.26.16.0/23"
+    },
+    "subnetIpRange": {
+      "value": "10.26.16.0/24"
+    },
+    "subnetName": {
+      "value": "develop"
+    },
+    "numberOfBlobStorageAccounts": {
+      "value": 1
+    }
+  }
+}
