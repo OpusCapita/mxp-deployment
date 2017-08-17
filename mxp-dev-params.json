@@ -29,9 +29,6 @@
     },
     "subnetName": {
       "value": "develop"
-    },
-    "numberOfBlobStorageAccounts": {
-      "value": 1
     }
   }
 }
