@@ -1036,7 +1036,7 @@
                    {
                        "id": "[resourceId('Microsoft.Compute/virtualMachines', variables('masterVmName2'))]"
                    }
-               ])*/
+               ] */
            },
            "dependsOn": [
            ]
