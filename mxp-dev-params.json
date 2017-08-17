@@ -4,16 +4,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "resourceGroupShort": {
-      "value": "besdev"
-    },
-    "mysqlPassword": {
-      "value": "notSecureP455w0rd"
-    },
-    "postgresPassword": {
-      "value": "kong"
+      "value": "mxpdev"
     },
     "domainNameLabel": {
-      "value": "bnp-develop"
+      "value": "mxp-develop"
     },
     "workerPoolSize": {
       "value": "3"
@@ -22,13 +16,13 @@
       "value": "yes"
     },
     "vnetName": {
-      "value": "besstage-vnet"
+      "value": "mxp-dev-vnet"
     },
     "vnetResourceGroupName": {
-      "value": "besstage"
+      "value": "mxp-dev"
     },
     "vnetIpRange": {
-      "value": "10.26.16.0/23"
+      "value": "10.26.17.0/23"
     },
     "subnetIpRange": {
       "value": "10.26.16.0/24"
