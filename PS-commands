@@ -1,0 +1,2 @@
+New-AzureRmResourceGroupDeployment -Name FirstShot -ResourceGroupName Messaging_Platform_DevTest_RG -TemplateUri https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/deploy-mxp-dev.json -TemplateParameterUri https://raw.git
+hubusercontent.com/OpusCapita/mxp-deployment/master/mxp-dev-params.json

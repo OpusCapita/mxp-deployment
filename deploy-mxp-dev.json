@@ -90,7 +90,11 @@
        "workerPoolScaleSetName": {
            "defaultValue": "swarmPool",
            "type": "String"
-       }
+       },
+       "numberOfBlobStorageAccounts": {
+           "defaultValue": 1,
+           "type": "int"
+       },
    },
    "variables": {
      "vnetName": "[if(equals(parameters('vnetExisting'),'no'), concat(parameters('resourceGroupShort'), '-vnet'), parameters('vnetName'))]",
