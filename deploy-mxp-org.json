@@ -7,11 +7,11 @@
            "type": "String"
        },
        "masterAvailibilitySetName": {
-           "defaultValue": "masterMpxAvSet",
+           "defaultValue": "masterAvSet",
            "type": "String"
        },
        "masterVmNamePrefix": {
-           "defaultValue": "swarmMpxMaster",
+           "defaultValue": "swarmMaster",
            "type": "String"
        },
        "masterVmSize": {
@@ -19,7 +19,7 @@
            "type": "String"
        },
        "sshPublicKey": {
-           "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Mova47tjiFFscXjQLA9lm0yUMY9q9qDVamH3QEEBV6GCjL7bVQSRblRwHl6UssvCE8ZpgEKQsUv0JXJiAwwjRgZr0BnnjXVvIrF+74LQF8pQMtUe8yIllwwzZfdkw4Ta/mWdrSb5Fb7EEYhq/Bv6KAUYG1bR6mwkYvDWAJXjSLnj/xUyLBk3KPEaLTee1BYbb9ELTHajIjJHL0NAa+nHWZUdLHxXutyMkF5Nf+0EG8ySH9/TxKHmzFQPgnKVDt4qptZWlwwmHOXVk1nj+qdW007X3Gkj0r0CJ6vTEwWGfZTA82Bc+/7td+qavA64OtAvlVdpWA+X2B8Pk/DUdwi5",
+           "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrb8CdHVAlJKJeHtRoEdFsKlNoxemhzcjVmiV1aR0PB5UqPuxyWmrsNKudSdNXaQI+d7B179j1LZ1SbwLNVZS8xGhGA84TLY8FdBPrqd7QDpZGr+OGmcIaEs/7hgSUVlHOIv6krYCgIho+bgvXAhQbBu7GhinUWyvraeYOQxkB9A/LuTacq4je0sfsYBf18OwtNTcyIwGsDMg9vNg+ML3/OQoNOGUCMiHkfin65gJo8l/Ckjj9Of8oHWOzH3RYSGbkZ9qhVq6dAhyB0yIbRTz0p5nML8eBg/rKeB1s7tCi6eq86HFLvhzv5qjP3hnplk1cgpp1V7VEw8og8YefD3Rh",
            "type": "String"
        },
        "adminUserName": {
@@ -90,6 +90,68 @@
        "workerPoolScaleSetName": {
            "defaultValue": "swarmPool",
            "type": "String"
+       },
+       "mysqlVmSize": {
+           "defaultValue": "Standard_DS1_v2",
+           "type": "String"
+       },
+       "mysqlAvailibilitySetName": {
+           "defaultValue": "mysqlAvSet",
+           "type": "String"
+       },
+       "mysqlVmNamePrefix": {
+           "defaultValue": "mysql",
+           "type": "String"
+       },
+       "mysqlPassword": {
+           "type": "String"
+       },
+       "mysqlVmNicNamePrefix": {
+           "defaultValue": "mysqlVmNic",
+           "type": "String"
+       },
+       "postgresVmSize": {
+           "defaultValue": "Standard_DS1_v2",
+           "type": "String"
+       },
+       "postgresAvailibilitySetName": {
+           "defaultValue": "postgresAvSet",
+           "type": "String"
+       },
+       "postgresVmNamePrefix": {
+           "defaultValue": "postgres",
+           "type": "String"
+       },
+       "postgresPassword": {
+           "type": "String"
+       },
+       "postgresVmNicNamePrefix": {
+           "defaultValue": "postgresVmNic",
+           "type": "String"
+       },
+       "numberOfBlobStorageAccounts": {
+           "defaultValue": 1,
+           "type": "int"
+       },
+       "vaults_Backup_MySQL_Test_name": {
+           "defaultValue": "Backup-MySQL-Test",
+           "type": "String"
+       },
+       "elasticSearchLbName": {
+           "defaultValue": "ElasticSearchLB",
+           "type": "String"
+       },
+       "elasticSearchPoolSize": {
+           "defaultValue": "3",
+           "type": "String"
+       },
+       "elasticSearchPoolVmSize": {
+           "defaultValue": "Standard_DS1_v2",
+           "type": "String"
+       },
+       "elasticSearchPoolScaleSetName": {
+           "defaultValue": "elasticSearchPool",
+           "type": "String"
        }
    },
    "variables": {
@@ -111,6 +173,13 @@
      "extLbHttpBackEndProbeId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/loadBalancers/', parameters('extLbName'), '/probes/gatewayProbe')]",
      "extLbSshBackEndAddressPoolId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/loadBalancers/', parameters('extLbName'), '/backendAddressPools/gatewayPool')]",
      "extLbSshBackEndProbeId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/loadBalancers/', parameters('extLbName'), '/probes/masterProbe')]",
+     "mysqlVmName0" : "[concat(parameters('mysqlVmNamePrefix'), '0')]",
+     "mysqlNetworkSecurityGroupName": "[concat(parameters('mysqlVmNamePrefix'), '-nsg')]",
+     "mysqlVmNicName0" : "[concat(parameters('mysqlVmNicNamePrefix'), '0')]",
+     "postgresVmName0" : "[concat(parameters('postgresVmNamePrefix'), '0')]",
+     "postgresNetworkSecurityGroupName": "[concat(parameters('postgresVmNamePrefix'), '-nsg')]",
+     "postgresVmNicName0" : "[concat(parameters('postgresVmNicNamePrefix'), '0')]",
+     "deployElasticSearchUrl": "[uri(deployment().properties.templateLink.uri, 'deploy_elasticsearch.json')]"
    },
    "resources": [
        {
@@ -134,6 +203,20 @@
                    }
                ]
            },
+           "dependsOn": []
+       },
+       {
+           "comments": "Generalized from resource: '/subscriptions/de36e6c5-a835-408f-8e54-a3b7dbe798b8/resourceGroups/rgdplytest/providers/Microsoft.RecoveryServices/vaults/Backup-MySQL-Test'.",
+           "type": "Microsoft.RecoveryServices/vaults",
+           "sku": {
+               "name": "RS0",
+               "tier": "Standard"
+           },
+           "name": "[parameters('vaults_Backup_MySQL_Test_name')]",
+           "apiVersion": "2016-06-01",
+           "location": "[resourceGroup().location]",
+           "scale": null,
+           "properties": {},
            "dependsOn": []
        },
        {
@@ -678,7 +761,7 @@
                "autoUpgradeMinorVersion": true,
                "settings": {
                    "fileUris": [
-                       "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wm.sh"
+                       "https://raw.githubusercontent.com/gr4per/azureswarm/master/master-install.sh"
                    ]
                },
                "protectedSettings": {
@@ -701,7 +784,7 @@
                "autoUpgradeMinorVersion": true,
                "settings": {
                    "fileUris": [
-                       "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wm.sh"
+                       "https://raw.githubusercontent.com/gr4per/azureswarm/master/master-install.sh"
                    ]
                },
                "protectedSettings": {
@@ -725,7 +808,7 @@
                "autoUpgradeMinorVersion": true,
                "settings": {
                    "fileUris": [
-                       "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wm.sh"
+                       "https://raw.githubusercontent.com/gr4per/azureswarm/master/master-install.sh"
                    ]
                },
                "protectedSettings": {
@@ -755,6 +838,45 @@
                            "destinationAddressPrefix": "*",
                            "access": "Allow",
                            "priority": 1000,
+                           "direction": "Inbound"
+                       }
+                   },
+                   {
+                       "name": "allow-kong-http",
+                       "properties": {
+                           "protocol": "TCP",
+                           "sourcePortRange": "*",
+                           "destinationPortRange": "8080",
+                           "sourceAddressPrefix": "*",
+                           "destinationAddressPrefix": "*",
+                           "access": "Allow",
+                           "priority": 1005,
+                           "direction": "Inbound"
+                       }
+                   },
+                   {
+                       "name": "allow-kong-https",
+                       "properties": {
+                           "protocol": "TCP",
+                           "sourcePortRange": "*",
+                           "destinationPortRange": "8443",
+                           "sourceAddressPrefix": "*",
+                           "destinationAddressPrefix": "*",
+                           "access": "Allow",
+                           "priority": 1007,
+                           "direction": "Inbound"
+                       }
+                   },
+                   {
+                       "name": "allow-kong-api",
+                       "properties": {
+                           "protocol": "TCP",
+                           "sourcePortRange": "*",
+                           "destinationPortRange": "8001",
+                           "sourceAddressPrefix": "*",
+                           "destinationAddressPrefix": "*",
+                           "access": "Allow",
+                           "priority": 1006,
                            "direction": "Inbound"
                        }
                    },
@@ -986,7 +1108,7 @@
                              "autoUpgradeMinorVersion": true,
                              "settings": {
                                  "fileUris": [
-                                     "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wxp-workers.sh"
+                                     "https://raw.githubusercontent.com/gr4per/azureswarm/master/worker-install.sh"
                                  ]
                              },
                              "protectedSettings": {
@@ -1119,6 +1241,271 @@
                ]
            },
            "dependsOn": []
+       },
+       {
+           "comments": "The mysqlServer0 is the cluster master.",
+           "type": "Microsoft.Compute/virtualMachines",
+           "name": "[variables('mysqlVmName0')]",
+           "apiVersion": "2016-04-30-preview",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "availabilitySet": {
+                   "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('mysqlAvailibilitySetName'))]"
+               },
+               "hardwareProfile": {
+                   "vmSize": "[parameters('mysqlVmSize')]"
+               },
+               "storageProfile": {
+                   "imageReference": {
+                       "publisher": "Canonical",
+                       "offer": "UbuntuServer",
+                       "sku": "16.04-LTS",
+                       "version": "latest"
+                   },
+                   "osDisk": {
+                       "createOption": "FromImage",
+                       "caching": "ReadWrite"
+                   },
+                   "dataDisks": [
+                     {
+                       "lun": "1",
+                       "createOption": "empty",
+                       "diskSizeGB": "1023"
+                     }
+                   ]
+               },
+               "osProfile": {
+                   "computerName": "[variables('mysqlVmName0')]",
+                   "adminUsername": "[parameters('adminUserName')]",
+                   "linuxConfiguration": {
+                       "disablePasswordAuthentication": true,
+                       "ssh": {
+                           "publicKeys": [
+                               {
+                                   "path": "[concat('/home/', parameters('adminUserName'), '/.ssh/authorized_keys')]",
+                                   "keyData": "[parameters('sshPublicKey')]"
+                               }
+                           ]
+                       }
+                   },
+                   "secrets": []
+               },
+               "networkProfile": {
+                   "networkInterfaces": [
+                       {
+                           "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('mysqlVmNicName0'))]"
+                       }
+                   ]
+               },
+               "diagnosticsProfile": {
+                   "bootDiagnostics": {
+                       "enabled": true,
+                       "storageUri": "[concat('https://', variables('diagStorageAccountName'), '.blob.core.windows.net/')]"
+                   }
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Compute/availabilitySets', parameters('mysqlAvailibilitySetName'))]",
+               "[resourceId('Microsoft.Storage/storageAccounts', variables('diskStorageAccountName'))]",
+               "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
+               "[resourceId('Microsoft.Network/networkInterfaces', variables('mysqlVmNicName0'))]"
+           ]
+       },
+       {
+           "type": "Microsoft.Compute/virtualMachines/extensions",
+           "name": "[concat(variables('mysqlVmName0'), '/mysqlInstallCustomScript')]",
+           "apiVersion": "2016-03-30",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "publisher": "Microsoft.Azure.Extensions",
+               "type": "CustomScript",
+               "typeHandlerVersion": "2.0",
+               "autoUpgradeMinorVersion": true,
+               "settings": {
+                   "fileUris": [
+                       "https://raw.githubusercontent.com/gr4per/azureswarm/master/mysql-install.sh"
+                   ]
+               },
+               "protectedSettings": {
+                   "commandToExecute": "[concat('./mysql-install.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('mysqlPassword'), ' ', variables('mysqlVmName0'), ' ', 'false')]"
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Compute/virtualMachines', variables('mysqlVmName0'))]",
+               "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('masterVmName0') ,'masterInstallCustomScript')]"
+           ]
+       },
+       {
+           "comments": "VM set for High Availability, ensuring all VMs are distributed across 3 fault domains and 5 update domains",
+           "type": "Microsoft.Compute/availabilitySets",
+           "sku": {
+               "name": "Aligned"
+           },
+           "name": "[parameters('postgresAvailibilitySetName')]",
+           "apiVersion": "2016-04-30-preview",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "platformUpdateDomainCount": 5,
+               "platformFaultDomainCount": 3
+           },
+           "dependsOn": [
+           ]
+       },
+       {
+           "type": "Microsoft.Network/networkInterfaces",
+           "name": "[variables('postgresVmNicName0')]",
+           "apiVersion": "2016-03-30",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "ipConfigurations": [
+                   {
+                       "name": "ipconfig1",
+                       "properties": {
+                           "privateIPAllocationMethod": "Dynamic",
+                           "subnet": {
+                               "id": "[variables('subnetIdRef')]"
+                           },
+                           "loadBalancerBackendAddressPools": []
+                       }
+                   }
+               ],
+               "dnsSettings": {
+                   "dnsServers": []
+               },
+               "enableIPForwarding": false,
+               "networkSecurityGroup": {
+                   "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('postgresNetworkSecurityGroupName'))]"
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+               "[resourceId('Microsoft.Network/networkSecurityGroups', variables('postgresNetworkSecurityGroupName'))]"
+           ]
+       },
+       {
+           "comments": "net work security group applied to postgres nodes.",
+           "type": "Microsoft.Network/networkSecurityGroups",
+           "name": "[variables('postgresNetworkSecurityGroupName')]",
+           "apiVersion": "2016-03-30",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "securityRules": [
+                   {
+                       "name": "default-allow-ssh",
+                       "properties": {
+                           "protocol": "TCP",
+                           "sourcePortRange": "*",
+                           "destinationPortRange": "22",
+                           "sourceAddressPrefix": "*",
+                           "destinationAddressPrefix": "*",
+                           "access": "Allow",
+                           "priority": 1000,
+                           "direction": "Inbound"
+                       }
+                   },
+                   {
+                       "name": "allow-postgres",
+                       "properties": {
+                           "protocol": "TCP",
+                           "sourcePortRange": "*",
+                           "destinationPortRange": "5432",
+                           "sourceAddressPrefix": "*",
+                           "destinationAddressPrefix": "*",
+                           "access": "Allow",
+                           "priority": 1005,
+                           "direction": "Inbound"
+                       }
+                   }
+               ]
+           },
+           "dependsOn": []
+       },
+       {
+           "comments": "The postgresServer0 is the cluster master.",
+           "type": "Microsoft.Compute/virtualMachines",
+           "name": "[variables('postgresVmName0')]",
+           "apiVersion": "2016-04-30-preview",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "availabilitySet": {
+                   "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('postgresAvailibilitySetName'))]"
+               },
+               "hardwareProfile": {
+                   "vmSize": "[parameters('postgresVmSize')]"
+               },
+               "storageProfile": {
+                   "imageReference": {
+                       "publisher": "Canonical",
+                       "offer": "UbuntuServer",
+                       "sku": "16.04-LTS",
+                       "version": "latest"
+                   },
+                   "osDisk": {
+                       "createOption": "FromImage",
+                       "caching": "ReadWrite"
+                   },
+                   "dataDisks": []
+               },
+               "osProfile": {
+                   "computerName": "[variables('postgresVmName0')]",
+                   "adminUsername": "[parameters('adminUserName')]",
+                   "linuxConfiguration": {
+                       "disablePasswordAuthentication": true,
+                       "ssh": {
+                           "publicKeys": [
+                               {
+                                   "path": "[concat('/home/', parameters('adminUserName'), '/.ssh/authorized_keys')]",
+                                   "keyData": "[parameters('sshPublicKey')]"
+                               }
+                           ]
+                       }
+                   },
+                   "secrets": []
+               },
+               "networkProfile": {
+                   "networkInterfaces": [
+                       {
+                           "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('postgresVmNicName0'))]"
+                       }
+                   ]
+               },
+               "diagnosticsProfile": {
+                   "bootDiagnostics": {
+                       "enabled": true,
+                       "storageUri": "[concat('https://', variables('diagStorageAccountName'), '.blob.core.windows.net/')]"
+                   }
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Compute/availabilitySets', parameters('postgresAvailibilitySetName'))]",
+               "[resourceId('Microsoft.Storage/storageAccounts', variables('diskStorageAccountName'))]",
+               "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
+               "[resourceId('Microsoft.Network/networkInterfaces', variables('postgresVmNicName0'))]"
+           ]
+       },
+       {
+           "type": "Microsoft.Compute/virtualMachines/extensions",
+           "name": "[concat(variables('postgresVmName0'), '/postgresInstallCustomScript')]",
+           "apiVersion": "2016-03-30",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "publisher": "Microsoft.Azure.Extensions",
+               "type": "CustomScript",
+               "typeHandlerVersion": "2.0",
+               "autoUpgradeMinorVersion": true,
+               "settings": {
+                   "fileUris": [
+                       "https://raw.githubusercontent.com/gr4per/azureswarm/master/postgres-install.sh"
+                   ]
+               },
+               "protectedSettings": {
+                   "commandToExecute": "[concat('./postgres-install.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' ', parameters('postgresPassword'))]"
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Compute/virtualMachines', variables('postgresVmName0'))]",
+               "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('masterVmName0') ,'masterInstallCustomScript')]"
+           ]
        },
        {
          "apiVersion": "2017-05-10",
