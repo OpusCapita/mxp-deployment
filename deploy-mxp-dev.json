@@ -226,7 +226,7 @@
                "[resourceId('Microsoft.Network/networkInterfaces', variables('masterVmNicName0'))]"
            ]
        },
-       {
+       /*{
            "comments": "Additional master vm.",
            "type": "Microsoft.Compute/virtualMachines",
            "name": "[variables('masterVmName1')]",
@@ -353,7 +353,7 @@
                "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
                "[resourceId('Microsoft.Network/networkInterfaces', variables('masterVmNicName2'))]"
            ]
-       },
+       }, */
        {
            "comments": "Public facing loadbalancer, acting as single public entry point to env. SSH is natted to master pool, http is balanced to master pool.",
            "type": "Microsoft.Network/loadBalancers",
@@ -1014,7 +1014,7 @@
                "[resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName'))]"
            ]
        },
-       {
+       /*{
            "comments": "VM set for High Availability, ensuring all VMs are distributed across 3 fault domains and 5 update domains",
            "type": "Microsoft.Compute/availabilitySets",
            "sku": {
@@ -1119,7 +1119,7 @@
                ]
            },
            "dependsOn": []
-       },
+       } */,
        {
          "apiVersion": "2017-05-10",
          "name": "linkedTemplate",
