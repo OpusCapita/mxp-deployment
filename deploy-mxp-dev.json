@@ -230,7 +230,7 @@
                "[resourceId('Microsoft.Network/networkInterfaces', variables('masterVmNicName0'))]"
            ]
        },
-       /*{
+       {
            "comments": "Additional master vm.",
            "type": "Microsoft.Compute/virtualMachines",
            "name": "[variables('masterVmName1')]",
@@ -357,7 +357,7 @@
                "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
                "[resourceId('Microsoft.Network/networkInterfaces', variables('masterVmNicName2'))]"
            ]
-       }, */
+       },
        {
            "comments": "Public facing loadbalancer, acting as single public entry point to env. SSH is natted to master pool, http is balanced to master pool.",
            "type": "Microsoft.Network/loadBalancers",

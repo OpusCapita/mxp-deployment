@@ -25,7 +25,7 @@
       "value": "10.26.17.0/23"
     },
     "subnetIpRange": {
-      "value": "10.26.16.0/24"
+      "value": "10.26.17.0/24"
     },
     "subnetName": {
       "value": "develop"
