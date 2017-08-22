@@ -538,11 +538,11 @@
                "autoUpgradeMinorVersion": true,
                "settings": {
                    "fileUris": [
-                       "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wm.sh"
+                       "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_mxp-master.sh"
                    ]
                },
                "protectedSettings": {
-                   "commandToExecute": "[concat('./install_wm.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' init')]"
+                   "commandToExecute": "[concat('./install_mxp-master.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' init')]"
                }
            },
            "dependsOn": [
