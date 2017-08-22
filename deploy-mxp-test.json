@@ -463,7 +463,7 @@
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('masterNetworkSecurityGroupName'))]"
             ]
         },
-       /*{
+       {
            "comments": "The zero master VM will init the docker swarm.",
            "type": "Microsoft.Compute/virtualMachines",
            "name": "[variables('masterVmName0')]",
@@ -525,6 +525,29 @@
                "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
                "[resourceId('Microsoft.Network/networkInterfaces', variables('masterVmNicName0'))]"
            ]
-       }, */
+       },
+       {
+           "type": "Microsoft.Compute/virtualMachines/extensions",
+           "name": "[concat(variables('masterVmName0'), '/masterInstallCustomScript')]",
+           "apiVersion": "2016-03-30",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "publisher": "Microsoft.Azure.Extensions",
+               "type": "CustomScript",
+               "typeHandlerVersion": "2.0",
+               "autoUpgradeMinorVersion": true,
+               "settings": {
+                   "fileUris": [
+                       "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wm.sh"
+                   ]
+               },
+               "protectedSettings": {
+                   "commandToExecute": "[concat('./master-install.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' init')]"
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Compute/virtualMachines', variables('masterVmName0'))]"
+           ]
+       },
        ]
 }
