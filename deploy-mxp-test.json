@@ -542,7 +542,7 @@
                    ]
                },
                "protectedSettings": {
-                   "commandToExecute": "[concat('./install_mxp-master.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' init')]"
+                   "commandToExecute": "[concat('./install_mxp-master.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' master','init')]"
                }
            },
            "dependsOn": [
