@@ -542,7 +542,7 @@
                    ]
                },
                "protectedSettings": {
-                   "commandToExecute": "[concat('./master-install.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' init')]"
+                   "commandToExecute": "[concat('./install_wm.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'), ' init')]"
                }
            },
            "dependsOn": [
