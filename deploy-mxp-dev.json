@@ -7,11 +7,11 @@
            "type": "String"
        },
        "masterAvailibilitySetName": {
-           "defaultValue": "masterMpxAvSet",
+           "defaultValue": "masterMxpAvSet",
            "type": "String"
        },
        "masterVmNamePrefix": {
-           "defaultValue": "swarmMpxMaster",
+           "defaultValue": "swarmMxpMaster",
            "type": "String"
        },
        "masterVmSize": {
@@ -27,15 +27,15 @@
            "type": "String"
        },
        "extLbName": {
-           "defaultValue": "ExtLB",
+           "defaultValue": "ExtMxpLB",
            "type": "String"
        },
        "masterVmNicNamePrefix": {
-           "defaultValue": "masterVmNic",
+           "defaultValue": "masterMxpVmNic",
            "type": "String"
        },
        "ExtLbPublicIpName": {
-           "defaultValue": "ExtPubIp",
+           "defaultValue": "ExtMxpPubIp",
            "type": "String"
        },
        "extLbHttpProbeUri": {
@@ -68,7 +68,7 @@
          "type": "String"
        },
        "swarmPoolLbName": {
-           "defaultValue": "IntLB",
+           "defaultValue": "IntMxpLB",
            "type": "String"
        },
        "workerPoolSize": {
@@ -84,11 +84,11 @@
            "type": "String"
        },
        "scaleSetStorageAccountPrefix": {
-           "defaultValue": "scaleSetStorage",
+           "defaultValue": "scaleMxpSetStorage",
            "type": "String"
        },
        "workerPoolScaleSetName": {
-           "defaultValue": "swarmPool",
+           "defaultValue": "swarmMxpPool",
            "type": "String"
        },
        "numberOfBlobStorageAccounts": {
@@ -737,7 +737,7 @@
                }
            },
            "dependsOn": [
-               "[resourceId('Microsoft.Compute/virtualMachines', variables('masterVmName2'))]",
+               "[resourceId('Microsoft.Compute/virtualMachines', variables('masterVmName3'))]",
                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('masterVmName0') ,'masterInstallCustomScript')]"
            ]
        },
@@ -990,7 +990,7 @@
                              "autoUpgradeMinorVersion": true,
                              "settings": {
                                  "fileUris": [
-                                     "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wxp-workers.sh"
+                                     "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wxp-worker.sh"
                                  ]
                              },
                              "protectedSettings": {
@@ -1019,27 +1019,35 @@
            ]
        },
        {
-         "apiVersion": "2017-05-10",
-         "name": "linkedTemplate",
-         "type": "Microsoft.Resources/deployments",
-         "properties": {
-           "mode": "incremental",
-           "templateLink": {
-             "uri": "[variables('deployElasticSearchUrl')]",
-             "contentVersion": "1.0.0.0"
-           },
-           "parameters": {
-               "sshPublicKey": {value:"[parameters('sshPublicKey')]"},
-               "adminUserName": {value:"[parameters('adminUserName')]"},
-               "subnetIdRef": {value:"[variables('subnetIdRef')]"},
-               "elasticSearchLbName": {value:"[parameters('elasticSearchLbName')]"},
-               "elasticSearchPoolSize": {value:"[parameters('elasticSearchPoolSize')]"},
-               "elasticSearchPoolVmSize": {value:"[parameters('elasticSearchPoolVmSize')]"},
-               "elasticSearchPoolScaleSetName": {value:"[parameters('elasticSearchPoolScaleSetName')]"},
-               "diagStorageAccountName": {value:"[variables('diagStorageAccountName')]"},
-               "masterVmName0": {value:"[variables('masterVmName0')]"}
-           }
-         }
-       }
+                "apiVersion": "2017-05-10",
+                "name": "masterClusterDeploy",
+                "type": "Microsoft.Resources/deployments",
+                "properties": {
+                  "mode": "incremental",
+                  "templateLink": {
+                    "uri": "[variables('deployMasterClusterUrl')]",
+                    "contentVersion": "1.0.0.0"
+                  },
+                  "parameters": {
+                      "subnetIdRef": {value:"[variables('subnetIdRef')]"},
+                      "masterAvailibilitySetName": {value:"[parameters('masterAvailibilitySetName')]"},
+                      "masterVmName0": {value:"[variables('masterVmName0')]"},
+                      "masterVmNamePrefix": {value:"[parameters('masterVmNamePrefix')]"},
+                      "masterVmSize": {value:"[parameters('masterVmSize')]"},
+                      "masterVmNicNamePrefix": {value:"[parameters('masterVmNicNamePrefix')]"},
+                      "masterNetworkSecurityGroupName": {value:"[variables('masterNetworkSecurityGroupName')]"},
+                      "adminUserName": {value:"[parameters('adminUserName')]"},
+                      "sshPublicKey": {value:"[parameters('sshPublicKey')]"},
+                      "diagStorageAccountName": {value:"[variables('diagStorageAccountName')]"},
+                      "extLbName": {value:"[parameters('extLbName')]"},
+                      "masterCount": {value:"[parameters('masterCount')]"}
+                  }
+                },
+                "dependsOn": [
+                  "[variables('subnetIdRef')]",
+                  "[resourceId('Microsoft.Network/loadBalancers', parameters('extLbName'))]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]"
+                ]
+             }
    ]
 }

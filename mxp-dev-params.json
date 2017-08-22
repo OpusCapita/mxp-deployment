@@ -4,7 +4,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "resourceGroupShort": {
-      "value": "mxpdev"
+      "value": "mpxdev"
+    },
+    "resourceGroupNameLong" : {
+      "value" : "Messaging_Platform_DevTest_RG"
     },
     "domainNameLabel": {
       "value": "mxp-develop"
@@ -16,10 +19,10 @@
       "value": "yes"
     },
     "vnetName": {
-      "value": "mxp-dev-vnet"
+      "value": "mxpdev-vnet"
     },
     "vnetResourceGroupName": {
-      "value": "mxp-dev"
+      "value": "Messaging_Platform_DevTest_RG"
     },
     "vnetIpRange": {
       "value": "10.26.17.0/23"
@@ -28,7 +31,7 @@
       "value": "10.26.17.0/24"
     },
     "subnetName": {
-      "value": "develop"
+      "value": "mpxdevelop"
     }
   }
 }
