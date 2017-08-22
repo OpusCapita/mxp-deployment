@@ -549,5 +549,215 @@
                "[resourceId('Microsoft.Compute/virtualMachines', variables('masterVmName0'))]"
            ]
        },
+       //workers
+       {
+           "comments": "SwarmPool LB.",
+           "type": "Microsoft.Network/loadBalancers",
+           "name": "[parameters('swarmPoolLbName')]",
+           "apiVersion": "2016-03-30",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "frontendIPConfigurations": [
+                   {
+                       "name": "LoadBalancerFrontEnd",
+                       "properties": {
+                           "privateIPAllocationMethod": "Dynamic",
+                           "subnet": {
+                               "id": "[variables('subnetIdRef')]"
+                           }
+                       }
+                   }
+               ],
+               "backendAddressPools": [
+                   {
+                       "name": "SwarmWorkers"
+                   }
+               ],
+               "loadBalancingRules": [
+                   {
+                       "name": "logstash-12201-gelf",
+                       "properties": {
+                           "frontendIPConfiguration": {
+                               "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), '/frontendIPConfigurations/LoadBalancerFrontEnd')]"
+                           },
+                           "frontendPort": 12201,
+                           "backendPort": 12201,
+                           "enableFloatingIP": false,
+                           "idleTimeoutInMinutes": 4,
+                           "protocol": "Udp",
+                           "loadDistribution": "Default",
+                           "backendAddressPool": {
+                               "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), '/backendAddressPools/SwarmWorkers')]"
+                           },
+                           "probe": {
+                               "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), '/probes/logstash-http-9600-probe')]"
+                           }
+                       }
+                   },
+                   {
+                       "name": "logstash-api",
+                       "properties": {
+                           "frontendIPConfiguration": {
+                               "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), '/frontendIPConfigurations/LoadBalancerFrontEnd')]"
+                           },
+                           "frontendPort": 9600,
+                           "backendPort": 9600,
+                           "enableFloatingIP": false,
+                           "idleTimeoutInMinutes": 4,
+                           "protocol": "Tcp",
+                           "loadDistribution": "Default",
+                           "backendAddressPool": {
+                               "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), '/backendAddressPools/SwarmWorkers')]"
+                           },
+                           "probe": {
+                               "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), '/probes/logstash-http-9600-probe')]"
+                           }
+                       }
+                   }
+               ],
+               "probes": [
+                   {
+                       "name": "logstash-http-9600-probe",
+                       "properties": {
+                           "protocol": "Http",
+                           "port": 9600,
+                           "requestPath": "/",
+                           "intervalInSeconds": 5,
+                           "numberOfProbes": 2
+                       }
+                   }
+               ],
+               "inboundNatRules": [],
+               "outboundNatRules": [],
+               "inboundNatPools": []
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+           ]
+       },
+       {
+           "comments": "VM scale set for swarm worker pool",
+           "type": "Microsoft.Compute/virtualMachineScaleSets",
+           "sku": {
+               "name": "[parameters('workerPoolVmSize')]",
+               "tier": "Standard",
+               "capacity": "[parameters('workerPoolSize')]"
+           },
+           "name": "[parameters('workerPoolScaleSetName')]",
+           "apiVersion": "2016-04-30-preview",
+           "location": "[resourceGroup().location]",
+           "properties": {
+               "upgradePolicy": {
+                   "mode": "Manual"
+               },
+               "virtualMachineProfile": {
+                   "osProfile": {
+                       "computerNamePrefix": "[concat(parameters('workerPoolScaleSetName'),'Worker')]",
+                       "adminUsername": "[parameters('adminUserName')]",
+                       "linuxConfiguration": {
+                           "disablePasswordAuthentication": true,
+                           "ssh": {
+                               "publicKeys": [
+                                   {
+                                       "path": "[concat('/home/', parameters('adminUserName'), '/.ssh/authorized_keys')]",
+                                       "keyData": "[parameters('sshPublicKey')]"
+                                   }
+                               ]
+                           }
+                       },
+                       "secrets": [],
+                       //"adminPassword": "[parameters('virtualMachineScaleSets_besswarm_adminPassword')]"
+                   },
+                   "storageProfile": {
+                       "osDisk": {
+                         "createOption": "FromImage",
+                         "caching": "ReadOnly"
+                       },
+                       "imageReference": {
+                           "publisher": "Canonical",
+                           "offer": "UbuntuServer",
+                           "sku": "16.04.0-LTS",
+                           "version": "latest"
+                       },
+                       "dataDisks": [
+                         {
+                           "lun": "1",
+                           "createOption": "empty",
+                           "diskSizeGB": "1023"
+                         }
+                       ]
+                   },
+                   "networkProfile": {
+                       "networkInterfaceConfigurations": [
+                           {
+                               "name": "[concat(parameters('workerPoolScaleSetName'),'-nic')]",
+                               "properties": {
+                                   "primary": true,
+                                   "ipConfigurations": [
+                                       {
+                                           "name": "[concat(parameters('workerPoolScaleSetName'),'-ipconfig')]",
+                                           "properties": {
+                                               "subnet": {
+                                                   "id": "[variables('subnetIdRef')]"
+                                               },
+                                               "loadBalancerBackendAddressPools": [
+                                                   {
+                                                       "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), concat('/backendAddressPools/SwarmWorkers'))]"
+                                                   }
+                                               ]/*,
+                                               "loadBalancerInboundNatPools": [
+                                                   {
+                                                       "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName')), concat('/inboundNatPools/', parameters('workerPoolScaleSetName'),'fnatpool'))]"
+                                                   }
+                                               ]*/
+                                           }
+                                       }
+                                   ],
+                                   /*"networkSecurityGroup": {
+                                       "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('swarmWorkerNetworkSecurityGroupName'))]"
+                                   }*/
+                               }
+                           }
+                       ]
+                   },
+                   "extensionProfile": {
+                     "extensions": [
+                       {
+                         "name" : "swarmJoinCustomScript",
+                         "properties": {
+                             "publisher": "Microsoft.Azure.Extensions",
+                             "type": "CustomScript",
+                             "typeHandlerVersion": "2.0",
+                             "autoUpgradeMinorVersion": true,
+                             "settings": {
+                                 "fileUris": [
+                                     "https://raw.githubusercontent.com/OpusCapita/mxp-deployment/master/install_wxp-worker.sh"
+                                 ]
+                             },
+                             "protectedSettings": {
+                                 "commandToExecute": "[concat('./install_wxp-worker.sh ', resourceGroup().location, ' ', variables('masterVmName0'), ' ', parameters('adminUserName'))]"
+                             }
+                         }
+                       }
+                     ]
+                   },
+                   "diagnosticsProfile": {
+                       "bootDiagnostics": {
+                           "enabled": true,
+                           "storageUri": "[concat('https://', variables('diagStorageAccountName'), '.blob.core.windows.net/')]"
+                       }
+                   }
+               }
+           },
+           "dependsOn": [
+               "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+               "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
+               "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('masterVmName0') ,'masterInstallCustomScript')]",
+               //"[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('masterVmName1') ,'masterInstallCustomScript')]",
+               //"[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('masterVmName2') ,'masterInstallCustomScript')]",
+               //"[resourceId('Microsoft.Network/networkSecurityGroups', parameters('swarmWorkerNetworkSecurityGroupName'))]"
+               "[resourceId('Microsoft.Network/loadBalancers', parameters('swarmPoolLbName'))]"
+           ]
+       },
        ]
 }
