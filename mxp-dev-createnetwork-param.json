@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "value": "mxp-dev-nw"
+        },
+        "location": {
+            "value": "westeurope"
+        },
+        "addressPrefix": {
+            "value": "10.27.0.0/16"
+        },
+        "subnetName": {
+            "value": "mxp-dev-man"
+        },
+        "subnetAddressPrefix": {
+            "value": "10.27.0.0/24"
+        }
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westeurope"
+        },
+        "virtualMachineName": {
+            "value": "mxp-is"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_DS1_v2"
+        },
+        "adminUsername": {
+            "value": "dm"
+        },
+        "virtualNetworkName": {
+            "value": "mxp-dev-nw"
+        },
+        "networkInterfaceName": {
+            "value": "mxp-is"
+        },
+        "networkSecurityGroupName": {
+            "value": "mxp-is-nsg"
+        },
+        "adminPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdTM6JDtjT2mvFWVKPHlAnzFAksAp6bw/oBfblU1ZX1CzRwp8fvyYy8Rewfk4M2EuDgtFcwd2DoWQSVhvGlTnhZ2m0+/1b9QRY6RtL7UEU3Q6li4aoOmthSwf4PUjtoFy7L4k41sY+d4KA+pes0obeHwbXEo/0+ZbzL9kcm5P+ek0eJlLzGOkGM+8+NhcEMYse34x12v1AG9pMNrQvL26Etwk3uvF/xrCpK9F1luUCeLBzZfRq//nWIZjAjqSppYjBLJFBJPTJM7x50OzMd98xn9YN1LEAj/sJAKpXSq5bpb5QTGcvJJgDVWkl+PCxnGcrROCLL74wBVtmLIo6RGQF"
+        },
+        "availabilitySetName": {
+            "value": "mxp-dev-avset"
+        },
+        "availabilitySetPlatformFaultDomainCount": {
+            "value": "2"
+        },
+        "availabilitySetPlatformUpdateDomainCount": {
+            "value": "5"
+        },
+        "diagnosticsStorageAccountName": {
+            "value": "mxpdevdiag"
+        },
+        "diagnosticsStorageAccountId": {
+            "value": "Microsoft.Storage/storageAccounts/mxpdevdiag"
+        },
+        "diagnosticsStorageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "subnetName": {
+            "value": "mxp-dev-sub-front"
+        },
+        "publicIpAddressName": {
+            "value": "mxp-is-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Dynamic"
+        }
+    }
+}

@@ -24,19 +24,7 @@ if [ "init" = "$5" ]
   then sudo echo "initializing swarm" && sudo docker swarm init --advertise-addr eth0
   else JOINTOKEN=$(curl $2:8888/manager-token.txt); echo "joining swarm with token $JOINTOKEN" && sudo docker swarm join --token $JOINTOKEN $2:2377
 fi
-sudo echo "configuring swarm token publish via rc.local"
-sudo systemctl enable rc-local.service
-sudo echo '#!/bin/bash
-mkdir /swarmtokenshare
-sudo docker swarm join-token worker | grep -o "SWMTKN\S*" > /swarmtokenshare/worker-token.txt
-sudo docker swarm join-token manager | grep -o "SWMTKN\S*" >> /swarmtokenshare/manager-token.txt
-cd /swarmtokenshare
-python -m SimpleHTTPServer 8888' > publish_token.sh
-sudo chmod +x publish_token.sh
-sudo cp publish_token.sh /etc/rc.local
-sudo echo "publishing swarm token"
-sudo bash publish_token.sh &
-sudo echo "swarm master init finished"
+curl $2:8888/worker-token.txt
 
 #setup consul
 #sudo echo "starting consul server..."
