@@ -10,13 +10,16 @@ Remove-AzureRmResourceGroupDeployment -Name FirstShot -ResourceGroupName Messagi
 
 
 
+# Login to azure resource-group
 
-Add-AzureRmAccount -SubscriptionId dafcede0-1826-41b6-b8c4-795b16aa7136
+    Add-AzureRmAccount -SubscriptionId dafcede0-1826-41b6-b8c4-795b16aa7136
 
 
 Stop-AzureRmResourceGroupDeployment -ResourceGroupName Messaging_Platform_DevTest_RG
 
-New-AzureRmResourceGroupDeployment -Mode Incremental -Name FirstShot -ResourceGroupName Messaging_Platform_DevTest_RG -TemplateFile deploy-mxp-dev.json -TemplateParameterFile mxp-dev-params.json
+# Do deployment on local json files
+
+    New-AzureRmResourceGroupDeployment -Mode Incremental -Name FirstShot -ResourceGroupName Messaging_Platform_DevTest_RG -TemplateFile deploy-mxp-dev.json -TemplateParameterFile mxp-dev-params.json
 
 
 # How to create VM's
