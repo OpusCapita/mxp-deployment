@@ -33,38 +33,9 @@ Make sure you have installed the azure_cli package
 5. az image create --resource-group Messaging_Platform_DevTest_RG --name mxp-is-vanilla-1.0 --source mxp-is
 
 
-# Output from create VM image
+# json files to be used
 
-``
-PS $ az image create --resource-group Messaging_Platform_DevTest_RG --name mxp-is-vanilla-1.0 --source mxp-is
-{
-  "id": "/subscriptions/dafcede0-1826-41b6-b8c4-795b16aa7136/resourceGroups/Messaging_Platform_DevTest_RG/providers/Microsoft.Compute/images/mxp-is-vanilla-1.0",
-  "location": "westeurope",
-  "name": "mxp-is-vanilla-1.0",
-  "provisioningState": "Succeeded",
-  "resourceGroup": "Messaging_Platform_DevTest_RG",
-  "sourceVirtualMachine": {
-    "id": "/subscriptions/dafcede0-1826-41b6-b8c4-795b16aa7136/resourceGroups/Messaging_Platform_DevTest_RG/providers/Microsoft.Compute/virtualMachines/mxp-is",
-    "resourceGroup": "Messaging_Platform_DevTest_RG"
-  },
-  "storageProfile": {
-    "dataDisks": [],
-    "osDisk": {
-      "blobUri": null,
-      "caching": "ReadWrite",
-      "diskSizeGb": null,
-      "managedDisk": {
-        "id": "/subscriptions/dafcede0-1826-41b6-b8c4-795b16aa7136/resourceGroups/Messaging_Platform_DevTest_RG/providers/Microsoft.Compute/disks/mxp-is_OsDisk_1_d5597dcb53794f719e86c0839300073f",
-        "resourceGroup": "Messaging_Platform_DevTest_RG"
-      },
-      "osState": "Generalized",
-      "osType": "Linux",
-      "snapshot": null,
-      "storageAccountType": null
-    }
-  },
-  "tags": null,
-  "type": "Microsoft.Compute/images"
-}
-
-``
+* mpx-dev-create-vm.json        - will create a plain RHEL 7.3 server
+* mxp-dev-create-vm-ubuntu.json - will crete a plain ubuntu 16.1 server
+* mxp-dev-ext-lb.json - will create lb in front of pub subnetwork
+* mxp-dev-createnetwork.json - creates the network and the subnets. OBS, don't run it.
