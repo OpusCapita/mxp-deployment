@@ -3,19 +3,37 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "value": "mxp-dev-nw"
+            "value": "Messaging_Platform_DevTest_VNET1_10_26_20_0_24"
         },
         "location": {
             "value": "westeurope"
         },
         "addressPrefix": {
-            "value": "10.27.0.0/16"
+            "value": "10.26.20.0/24"
         },
-        "subnetName": {
-            "value": "mxp-dev-man"
+        "subnetNameManager": {
+            "value": "VNET1_dev_management"
         },
-        "subnetAddressPrefix": {
-            "value": "10.27.0.0/24"
+        "subnetAddressPrefixManager": {
+            "value": "10.26.20.16/28"
+        },
+        "subnetNameFrontend": {
+            "value" : "VNET1_dev_frontend"
+        },
+        "subnetAddressPrefixManager": {
+            "value": "10.26.20.32/27"
+        },
+        "subnetNameUm": {
+            "value" : "VNET1_dev_um"
+        },
+        "subnetAddressPrefixManager": {
+            "value": "10.26.20.64/27"
+        },
+        "subnetNamePublic": {
+            "value" : "VNET1_dev_public"
+        },
+        "subnetAddressPrefixManager": {
+            "value": "10.26.20.96/27"
         }
     }
 }

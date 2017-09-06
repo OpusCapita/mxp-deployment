@@ -12,11 +12,35 @@
       "type": "string",
       "defaultValue": "10.0.0.0/16"
     },
-    "subnetName": {
+    "subnetNameManager": {
       "type": "string",
       "defaultValue": "subnet-1"
     },
-    "subnetAddressPrefix": {
+    "subnetAddressPrefixManager": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    },
+     "subnetNameFrontend": {
+      "type": "string",
+      "defaultValue": "subnet-1"
+    },
+    "subnetAddressPrefixFrontend": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    },
+     "subnetNameUm": {
+      "type": "string",
+      "defaultValue": "subnet-1"
+    },
+    "subnetAddressPrefixUm": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    },
+     "subnetNamePublic": {
+      "type": "string",
+      "defaultValue": "subnet-1"
+    },
+    "subnetAddressPrefixPublic": {
       "type": "string",
       "defaultValue": "10.0.0.0/24"
     }
@@ -35,11 +59,29 @@
         },
         "subnets": [
           {
-            "name": "[parameters('subnetName')]",
+            "name": "[parameters('subnetNameManager')]",
             "properties": {
-              "addressPrefix": "[parameters('subnetAddressPrefix')]"
+              "addressPrefix": "[parameters('subnetAddressPrefixManager')]"
             }
-          }
+          },
+          {
+            "name": "[parameters('subnetNameFrontend')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetAddressPrefixFrontend')]"
+            }
+          },
+          {
+            "name": "[parameters('subnetNameUm')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetAddressPrefixUm')]"
+            }
+          },
+          {
+            "name": "[parameters('subnetNamePublic')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetAddressPrefixPublic')]"
+            }
+          },
         ]
       }
     }

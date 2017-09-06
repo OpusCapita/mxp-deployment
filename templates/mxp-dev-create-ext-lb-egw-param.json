@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "value": "mxp-dev-lb"
+            "value": "mp-dev-lb-egq"
         },
         "location": {
             "value": "westeurope"
         },
         "publicIPAddressName": {
-            "value": "mxp-dev-lb-ipv4"
+            "value": "mp-dev-lb-egw-ipv4"
         }
     }
 }
