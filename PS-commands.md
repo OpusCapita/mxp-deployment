@@ -39,3 +39,8 @@ Make sure you have installed the azure_cli package
 * mxp-dev-create-vm-ubuntu.json - will crete a plain ubuntu 16.1 server
 * mxp-dev-ext-lb.json - will create lb in front of pub subnetwork
 * mxp-dev-createnetwork.json - creates the network and the subnets. OBS, don't run it.
+
+# param files to be used
+
+* mxp-dev-create-egw-server-param.json -
+* mxp-dev-create-front
